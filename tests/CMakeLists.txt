@@ -6,6 +6,11 @@ cmake_minimum_required(VERSION 3.27)
 
 project(Tests)
 
+
+file(GLOB MOCK_FILES ../mock/*)
+
+file(COPY ${MOCK_FILES} DESTINATION ./mock)
+
 add_executable(TestGame game.cpp)
 add_executable(TestFiles files.cpp)
 

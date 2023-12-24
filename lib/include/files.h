@@ -16,6 +16,7 @@ public:
     std::vector<unsigned long> resolves;
     ResolvedFile(const std::string& filePath);
     void updateResolved();
+    void clear();
 };
 
 

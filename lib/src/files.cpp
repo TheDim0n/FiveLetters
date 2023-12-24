@@ -30,6 +30,14 @@ void files::ResolvedFile::updateResolved() {
     }
 }
 
+void files::ResolvedFile::clear() {
+    std::ofstream out(this->filePath);
+    if (out.is_open()) out.close();
+    else {
+        throw std::runtime_error("File " + filePath + " not found\n");
+    }
+}
+
 
 files::WordsFile::WordsFile(const std::string& filePath, char sep) {
     this->filePath = filePath;
