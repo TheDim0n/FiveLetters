@@ -1,4 +1,6 @@
 #include <iostream>
+#include <set>
+#include <random>
 
 #include <files.h>
 
@@ -38,7 +40,6 @@ void files::ResolvedFile::clear() {
     }
 }
 
-
 files::WordsFile::WordsFile(const std::string& filePath, char sep) {
     this->filePath = filePath;
     this->sep = sep;
@@ -65,4 +66,17 @@ std::pair<unsigned long, std::string> files::WordsFile::getWordFromString(
     word.first = std::stoul(line.substr(0, sepPos));
     word.second = line.substr(sepPos, lineSize - sepPos);
     return word;
+}
+
+std::pair<unsigned long, std::string> files::WordsFile::getRandomUnresolvedWord(
+    const std::vector<unsigned long>& resolved
+) {
+    std::set<unsigned long> wordIDs = {};
+    for (auto& [id, _]: this->words) wordIDs.insert(id);
+    for (auto& item: resolved) {
+        if (wordIDs.contains(item)) wordIDs.erase(item);
+    }
+
+    const unsigned long randomIndex = std::rand() % wordIDs.size();
+    return *this->words.find(*wordIDs.find(randomIndex));
 }

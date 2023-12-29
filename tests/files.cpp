@@ -25,6 +25,22 @@ void testResolvedFile() {
     assert(resolvedfile.resolves.size() == 0);
 }
 
+void testWordsFile() {
+    const std::string wordsFilePath = "./mock/words.csv";
+
+    auto wordsFile = files::WordsFile(wordsFilePath);
+
+    std::vector<unsigned long> resolved = {};
+
+    for(size_t i = 0; i < 100; i++) {
+        const auto firstID = wordsFile.getRandomUnresolvedWord(resolved);
+        resolved.push_back(firstID.first);
+        const auto secondID = wordsFile.getRandomUnresolvedWord(resolved);
+        assert(firstID.first != secondID.first);
+        resolved.clear();
+    }
+}
+
 
 int main() {
     testResolvedFile();

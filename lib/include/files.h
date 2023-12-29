@@ -32,7 +32,7 @@ private:
 
 public:
     WordsFile(const std::string& filePath, char sep = ';');
-    const std::string& getRandomUnresolvedWord(
+    std::pair<unsigned long, std::string> getRandomUnresolvedWord(
         const std::vector<unsigned long>& resolved
     );
 
