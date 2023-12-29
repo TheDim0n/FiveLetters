@@ -1,6 +1,5 @@
 #include <iostream>
 #include <set>
-#include <random>
 
 #include <files.h>
 
@@ -77,6 +76,8 @@ std::pair<unsigned long, std::string> files::WordsFile::getRandomUnresolvedWord(
         if (wordIDs.contains(item)) wordIDs.erase(item);
     }
 
+    std::srand(std::time(nullptr));
     const unsigned long randomIndex = std::rand() % wordIDs.size();
-    return *this->words.find(*wordIDs.find(randomIndex));
+    const auto randomWordID = *wordIDs.find(randomIndex);
+    return *this->words.find(randomWordID);
 }

@@ -32,7 +32,7 @@ void testWordsFile() {
 
     std::vector<unsigned long> resolved = {};
 
-    for(size_t i = 0; i < 100; i++) {
+    for(size_t i = 0; i < 1'000; i++) {
         const auto firstID = wordsFile.getRandomUnresolvedWord(resolved);
         resolved.push_back(firstID.first);
         const auto secondID = wordsFile.getRandomUnresolvedWord(resolved);
@@ -44,5 +44,6 @@ void testWordsFile() {
 
 int main() {
     testResolvedFile();
+    testWordsFile();
     return EXIT_SUCCESS;
 }
