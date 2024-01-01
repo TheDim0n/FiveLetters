@@ -1,10 +1,15 @@
 #ifndef FILES_H_
 #define FILES_H_
 
-#include <string>
-#include <vector>
+
+#include <array>
 #include <fstream>
 #include <map>
+#include <optional>
+#include <string>
+#include <vector>
+
+#include <constants.h>
 
 
 namespace files {
@@ -35,7 +40,27 @@ public:
     std::pair<unsigned long, std::string> getRandomUnresolvedWord(
         const std::vector<unsigned long>& resolved
     );
+    std::string getWordByID(const unsigned long id);
 
+};
+
+class StateFile {
+private:
+    std::string filePath;
+    std::array<constants::State, 5> states;
+    unsigned long wordID;
+    uint8_t attemptions;
+
+public:
+    StateFile(const std::string& filePath);
+    unsigned long getWordID();
+    std::array<constants::State, 5> getStates();
+    uint8_t getAttemptions();
+    void update(
+        unsigned long wordID,
+        std::optional<std::array<constants::State, 5>> states = std::nullopt,
+        std::optional<uint8_t> attemptions = std::nullopt
+    );
 };
 }
 #endif

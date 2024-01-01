@@ -9,7 +9,7 @@ namespace Game {
 class Game {
 private:
     std::string solution;
-    std::vector<uint8_t> states;
+    std::vector<uint8_t> states; // TODO: use std::array<constants::State, 5>
     size_t word_size;
     uint8_t attemptions;
 

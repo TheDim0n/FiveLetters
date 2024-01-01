@@ -1,8 +1,10 @@
 #include <cassert>
 #include <iostream>
 #include <filesystem>
+#include <optional>
 
 #include <files.h>
+
 
 namespace fs = std::filesystem;
 
@@ -39,11 +41,56 @@ void testWordsFile() {
         assert(firstID.first != secondID.first);
         resolved.clear();
     }
+
+    auto word = wordsFile.getWordByID(1);
+
+    try {
+        word = wordsFile.getWordByID(-100);
+        std::terminate();
+    } catch (const std::exception& e) {}
+}
+
+
+void testStateFile() {
+    const std::string stateFilePath = "./mock/state.txt";
+    auto stateFile = files::StateFile(stateFilePath);
+    assert(stateFile.getWordID() == 0);
+    assert(stateFile.getAttemptions() == constants::attemptions);
+    for (const auto state: stateFile.getStates()) {
+        assert(state == constants::State::undefined);
+    }
+
+    const std::array<constants::State, 5> states = {
+        constants::State::notFound,
+        constants::State::notFound,
+        constants::State::notFound,
+        constants::State::notFound,
+        constants::State::notFound
+    };
+
+    stateFile.update(1, states, 3);
+
+    stateFile = files::StateFile(stateFilePath);
+
+    assert(stateFile.getWordID() == 1);
+    assert(stateFile.getAttemptions() == static_cast<uint8_t>(3));
+    for (const auto state: stateFile.getStates()) {
+        assert(state == constants::State::notFound);
+    }
+
+    stateFile.update(0);
+
+    assert(stateFile.getWordID() == 0);
+    assert(stateFile.getAttemptions() == constants::attemptions);
+    for (const auto state: stateFile.getStates()) {
+        assert(state == constants::State::undefined);
+    }
 }
 
 
 int main() {
     testResolvedFile();
     testWordsFile();
+    testStateFile();
     return EXIT_SUCCESS;
 }

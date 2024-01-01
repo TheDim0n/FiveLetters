@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <sstream>
 
 #include <files.h>
 
@@ -77,7 +78,97 @@ std::pair<unsigned long, std::string> files::WordsFile::getRandomUnresolvedWord(
     }
 
     std::srand(std::time(nullptr));
-    const unsigned long randomIndex = std::rand() % wordIDs.size();
-    const auto randomWordID = *wordIDs.find(randomIndex);
-    return *this->words.find(randomWordID);
+    unsigned long randomIndex = std::rand() % wordIDs.size();
+    auto randomWordID = wordIDs.find(randomIndex);
+    for (int i = 1; i < 10; i++) {
+        if (randomWordID != wordIDs.end()) break;
+        randomIndex = std::rand() % wordIDs.size();
+        randomWordID = wordIDs.find(randomIndex);
+    }
+    return *this->words.find(*randomWordID);
+}
+
+std::string files::WordsFile::getWordByID(const unsigned long id) {
+    return this->words.at(id);
+}
+
+files::StateFile::StateFile(const std::string& filePath) {
+    this->filePath = filePath;
+
+    std::ifstream input(filePath);
+    std::string line;
+
+    if (input.is_open()) {
+        std::getline(input, line);
+        this->wordID = std::stoul(line);
+        if (this->wordID == 0) {
+            this->states = {
+                constants::State::undefined,
+                constants::State::undefined,
+                constants::State::undefined,
+                constants::State::undefined,
+                constants::State::undefined
+            };
+            this->attemptions = constants::attemptions;
+        } else {
+            size_t i = 0;
+            std::getline(input, line);
+            std::stringstream str(line);
+            while (std::getline(str, line, ' ')) {
+                this->states[i] = static_cast<constants::State>(std::stoi(line));
+                i++;
+            }
+            std::getline(input, line);
+            this->attemptions = static_cast<uint8_t>(std::stoi(line));
+        }
+        input.close();
+    } else {
+        throw std::runtime_error("File " + filePath + " not found\n");
+    }
+}
+
+void files::StateFile::update(
+    unsigned long wordID,
+    std::optional<std::array<constants::State, 5>> states,
+    std::optional<uint8_t> attemptions
+) {
+    this->wordID = wordID;
+    this->states = states.value_or(std::array<constants::State, 5> {
+        constants::State::undefined,
+        constants::State::undefined,
+        constants::State::undefined,
+        constants::State::undefined,
+        constants::State::undefined
+    });
+    this->attemptions = attemptions.value_or(constants::attemptions);
+
+    std::ofstream out(this->filePath);
+
+    if (out.is_open()) {
+        out << this->wordID << std::endl;
+        if (states) {
+            const size_t len = this->states.size();
+            for (size_t i = 0; i < len; i++) {
+                out << this->states[i];
+                if (i == len - 1) out<< std::endl;
+                else out<< ' ';
+            }
+        }
+        if (attemptions) out << static_cast<int>(this->attemptions) << std::endl;
+        out.close();
+    } else {
+        throw std::runtime_error("File " + filePath + " not found\n");
+    }
+}
+
+unsigned long files::StateFile::getWordID() {
+    return this->wordID;
+}
+
+uint8_t files::StateFile::getAttemptions() {
+    return this->attemptions;
+}
+
+std::array<constants::State, 5> files::StateFile::getStates() {
+    return this->states;
 }
