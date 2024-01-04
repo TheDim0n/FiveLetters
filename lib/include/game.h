@@ -1,6 +1,10 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#ifdef __linux
+#include <cstdint>
+#endif
+
 #include <array>
 #include <string>
 

@@ -77,7 +77,7 @@ std::pair<unsigned long, std::string> files::WordsFile::getRandomUnresolvedWord(
         if (wordIDs.contains(item)) wordIDs.erase(item);
     }
 
-    std::srand(time(nullptr));
+    std::srand(std::time(nullptr));
     unsigned long randomIndex = std::rand() % wordIDs.size();
     auto randomWordID = wordIDs.find(randomIndex);
     for (int i = 1; i < 10; i++) {

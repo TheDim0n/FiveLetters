@@ -1,6 +1,9 @@
 #ifndef FILES_H_
 #define FILES_H_
 
+#ifdef __linux
+#include <cstdint>
+#endif
 
 #include <array>
 #include <fstream>
@@ -8,7 +11,7 @@
 #include <optional>
 #include <string>
 #include <vector>
-#include <time.h>
+#include <ctime>
 
 #include <constants.h>
 
