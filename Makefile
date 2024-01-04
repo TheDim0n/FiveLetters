@@ -5,7 +5,6 @@ BUILD_DIR=dist
 all: init build test
 
 
-
 .SILENT:
 init:
 	cmake -S ${SOURCES_DIR} -B ${BUILD_DIR} -G "Unix Makefiles"

@@ -5,18 +5,38 @@
 
 
 void test_game() {
-    const std::string solution = "право";
-    const std::string bad_solution = "народ";
+    const std::string solution = "фывап";
+    const std::string badSolution = "йавыф";
     const uint8_t attemptions = 5;
 
+    std::array<constants::State, 5> correctState = {
+        constants::State::inCorrectPos,
+        constants::State::inCorrectPos,
+        constants::State::inCorrectPos,
+        constants::State::inCorrectPos,
+        constants::State::inCorrectPos,
+    };
+
+    std::array<constants::State, 5> badState = {
+        constants::State::notFound,
+        constants::State::inAnoterPos,
+        constants::State::inCorrectPos,
+        constants::State::inAnoterPos,
+        constants::State::inAnoterPos,
+    };
+
     Game::Game game = Game::Game(solution, attemptions);
-    bool status = game.check_attemption(solution);
+    bool status = game.checkAttemption(solution);
     assert(status == true);
+    assert(correctState == game.getStates());
+    assert(badState != game.getStates());
 
-    status = game.check_attemption(bad_solution);
+    status = game.checkAttemption(badSolution);
     assert(status == false);
+    assert(correctState != game.getStates());
+    assert(badState == game.getStates());
 
-    assert(game.get_attemption() == attemptions - 2);
+    assert(game.getAttemption() == attemptions - 2);
 }
 
 int main() {
