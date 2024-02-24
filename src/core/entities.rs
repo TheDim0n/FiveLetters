@@ -1,5 +1,6 @@
 use crate::core::value_objects as vo;
 
+
 pub struct Attempt {
     target: String,
     char_count: usize,
