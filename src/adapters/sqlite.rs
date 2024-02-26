@@ -31,4 +31,23 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
     }
 
     fn close(self) { drop(self.connection) }
+
+    fn fill_tables_with_init_data(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let mut words_content = std::fs::read_to_string("mock/words.csv")?;
+        let mut query = String::from("INSERT INTO words (id, value) VALUES");
+        words_content = words_content.replace("\r", "");
+        for row in words_content.split("\n") {
+            let a: Vec<&str> = row.split(';').collect();
+            if a.len() == 2 {
+                query.push_str(format!("\n({}, '{}'),", a[0], a[1]).as_str());
+            }
+        }
+        match query.strip_suffix(",") {
+            Some(value) => query = value.to_string(),
+            None => (),
+        };
+        query.push(';');
+        self.connection.execute(query)?;
+        Ok(())
+    }
 }

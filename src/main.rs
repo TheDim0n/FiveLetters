@@ -6,5 +6,6 @@ fn main() {
 
     let repo = FiveLettersRepo::new(connection);
     repo.create_tables().unwrap();
+    repo.fill_tables_with_init_data().unwrap();
     repo.close();
 }
