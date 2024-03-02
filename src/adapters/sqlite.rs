@@ -1,4 +1,4 @@
-use crate::core::interfaces;
+use crate::core::{entities, interfaces};
 
 
 pub struct FiveLettersRepo {
@@ -7,6 +7,9 @@ pub struct FiveLettersRepo {
 impl FiveLettersRepo {
     pub fn new(connection: sqlite::Connection) -> FiveLettersRepo {
         FiveLettersRepo{connection}
+    }
+    fn get_current_attempt($self) -> Option<sqlite::Row> {
+
     }
 }
 
@@ -48,5 +51,31 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
         query.push(';');
         self.connection.execute(query)?;
         Ok(())
+    }
+
+    fn set_next_solution(&self) {
+
+    }
+
+    fn get_actual_session(&self) -> entities::GameSession {
+        let mut current_attempt_res = self.connection.prepare("
+        select
+            id,
+            value
+        from words
+        where status = 0
+        limit 1
+        ").unwrap().into_iter().map(|row| row.unwrap());
+        let current_attempt = current_attempt_res.next();
+        match current_attempt {
+            Some(row) => {
+                println!("{:?}", row);
+                return row.read::<&str, _>("value").into();
+            }
+            None => {
+
+            }
+        }
+        entities::GameSession::from("test")
     }
 }
