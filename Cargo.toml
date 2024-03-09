@@ -5,5 +5,26 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "desktop"
+path = "src/bin/desktop/main.rs"
+test = false
+doctest = false
+bench = false
+doc = false
+
+
+[[bin]]
+name = "cli"
+path = "src/bin/cli.rs"
+test = false
+doctest = false
+bench = false
+doc = false
+
+
 [dependencies]
 sqlite = "0.33.0"
+
+[target.'cfg(windows)'.dependencies]
+winit = "0.29.14"

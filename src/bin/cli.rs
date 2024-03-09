@@ -5,8 +5,9 @@ fn main() {
     let connection = sqlite::open("mock/database.db").unwrap();
 
     let repo = FiveLettersRepo::new(connection);
-    // repo.create_tables().unwrap();
+    repo.create_tables().unwrap();
     // repo.fill_tables_with_init_data().unwrap();
-    repo.get_actual_session();
+    let session = repo.get_actual_session();
+    println!("{}", session.solution());
     repo.close();
 }

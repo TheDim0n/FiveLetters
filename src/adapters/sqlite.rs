@@ -1,4 +1,4 @@
-use crate::core::{entities, interfaces};
+use crate::core::{entities, interfaces, value_objects as vo};
 
 
 pub struct FiveLettersRepo {
@@ -8,19 +8,16 @@ impl FiveLettersRepo {
     pub fn new(connection: sqlite::Connection) -> FiveLettersRepo {
         FiveLettersRepo{connection}
     }
-    fn get_current_attempt($self) -> Option<sqlite::Row> {
-
-    }
 }
 
 impl interfaces::FiveLettersRepo for FiveLettersRepo {
     fn create_tables(&self) -> Result<(), Box<dyn std::error::Error>> {
-        self.connection.execute("
+        let query = format!("
         CREATE TABLE IF NOT EXISTS words (
             id     INTEGER PRIMARY KEY AUTOINCREMENT,
             value  TEXT    NOT NULL,
             status INTEGER NOT NULL
-                           DEFAULT ( -1)
+                           DEFAULT ( {default_status})
         );
         CREATE TABLE IF NOT EXISTS statuses (
             id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +26,8 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
             number  INTEGER NOT NULL,
             value   TEXT    NOT NULL
         );
-        ")?;
+        ", default_status=vo::WordStatuses::Inactive);
+        self.connection.execute(query)?;
         Ok(())
     }
 
@@ -54,28 +52,50 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
     }
 
     fn set_next_solution(&self) {
+        let mut query = format!(
+            "update words set status = {new_status} where status = {old_status}",
+            new_status=vo::WordStatuses::Solved,
+            old_status=vo::WordStatuses::Active
+        );
+        self.connection.execute(query).unwrap();
 
+        query = format!("
+        update words set status = {new_status} where id = (
+            select
+                id
+            from words
+            where status = {old_status}
+            order by random()
+            limit 1
+        )
+        ", old_status=vo::WordStatuses::Inactive, new_status=vo::WordStatuses::Active);
+        self.connection.execute(query).unwrap();
     }
 
     fn get_actual_session(&self) -> entities::GameSession {
-        let mut current_attempt_res = self.connection.prepare("
+        let query = format!("
         select
             id,
             value
         from words
-        where status = 0
+        where status = {status}
         limit 1
-        ").unwrap().into_iter().map(|row| row.unwrap());
+        ", status=vo::WordStatuses::Active);
+        let mut current_attempt_res = self.connection
+            .prepare(query)
+            .unwrap()
+            .into_iter()
+            .map(|row| row.unwrap());
         let current_attempt = current_attempt_res.next();
         match current_attempt {
             Some(row) => {
-                println!("{:?}", row);
-                return row.read::<&str, _>("value").into();
+                let word: &str = row.read::<&str, _>("value").into();
+                entities::GameSession::from(word)
             }
             None => {
-
+                self.set_next_solution();
+                self.get_actual_session()
             }
         }
-        entities::GameSession::from("test")
     }
 }
