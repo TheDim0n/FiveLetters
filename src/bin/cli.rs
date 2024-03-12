@@ -6,7 +6,7 @@ fn main() {
 
     let repo = FiveLettersRepo::new(connection);
     repo.create_tables().unwrap();
-    // repo.fill_tables_with_init_data().unwrap();
+    repo.fill_tables_with_init_data().unwrap_or(());
     let session = repo.get_actual_session();
     println!("{}", session.solution());
     repo.close();
