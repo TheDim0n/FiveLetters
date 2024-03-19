@@ -89,7 +89,7 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
         let current_attempt = current_attempt_res.next();
         match current_attempt {
             Some(row) => {
-                let word: &str = row.read::<&str, _>("value").into();
+                let word: &str = row.read::<&str, _>("value");
                 entities::GameSession::from(word)
             }
             None => {
