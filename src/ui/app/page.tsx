@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { sessionCompleted } from "./mock";
+
 import styles from "./page.module.css";
 
 
@@ -9,6 +11,8 @@ interface Active {
   row: number | undefined,
   col: number | undefined
 }
+
+
 
 
 export default function Home() {
