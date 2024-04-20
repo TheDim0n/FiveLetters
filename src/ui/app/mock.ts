@@ -1,4 +1,4 @@
-import { GameSession, LetterStatus } from "./types";
+import { GameSession, LetterStatus } from "./types.d";
 
 
 export const sessionCompleted: GameSession = {
