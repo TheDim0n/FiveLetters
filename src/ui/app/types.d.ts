@@ -12,7 +12,7 @@ export interface Attemption {
   
   
 export interface GameSession {
-    target: string,
     attemptions: Attemption[],
-    current_attempt: number
+    current_attempt: number,
+    completed: boolean
 }
