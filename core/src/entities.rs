@@ -1,4 +1,4 @@
-use crate::core::value_objects as vo;
+use crate::value_objects as vo;
 
 
 type Attemptions = [vo::Attemption; vo::ATTEMPT_COUNT];

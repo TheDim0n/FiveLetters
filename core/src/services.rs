@@ -1,4 +1,4 @@
-use crate::core::{entities, interfaces};
+use crate::{entities, interfaces};
 
 
 type Repo<'rlt> = &'rlt dyn interfaces::FiveLettersRepo;

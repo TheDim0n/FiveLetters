@@ -1,4 +1,4 @@
-use crate::core::entities;
+use crate::entities;
 
 
 pub trait FiveLettersRepo {

@@ -16,6 +16,7 @@ impl std::fmt::Display for WordStatuses {
 }
 
 #[derive(Debug)]
+#[warn(dead_code)]
 pub struct Attemption {
     word: String,
     statuses: [LetterStatus; WORD_SIZE]

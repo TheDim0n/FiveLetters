@@ -1,4 +1,4 @@
-use crate::core::{entities, interfaces, value_objects as vo};
+use core::{entities, interfaces, value_objects as vo};
 
 
 pub struct FiveLettersRepo {

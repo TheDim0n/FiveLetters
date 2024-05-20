@@ -3,27 +3,37 @@
 version = 3
 
 [[package]]
+name = "adapters"
+version = "0.1.0"
+dependencies = [
+ "core",
+ "sqlite",
+]
+
+[[package]]
 name = "cc"
-version = "1.0.87"
+version = "1.0.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3286b845d0fccbdd15af433f61c5970e711987036cb468f437ff6badd70f4e24"
+checksum = "41c270e7540d725e65ac7f1b212ac8ce349719624d7bcff99f8e2e488e8cf03f"
+
+[[package]]
+name = "cli"
+version = "0.1.0"
+dependencies = [
+ "adapters",
+ "core",
+ "sqlite",
+]
 
 [[package]]
 name = "core"
 version = "0.1.0"
 
 [[package]]
-name = "fiveletters"
-version = "0.1.0"
-dependencies = [
- "sqlite",
-]
-
-[[package]]
 name = "libc"
-version = "0.2.153"
+version = "0.2.155"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
+checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 
 [[package]]
 name = "pkg-config"
@@ -43,9 +53,9 @@ dependencies = [
 
 [[package]]
 name = "sqlite3-src"
-version = "0.6.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9448d45899495acd1a46b0b888ae9747c13551fb0d8f4a60ab485da52b040503"
+checksum = "174d4a6df77c27db281fb23de1a6d968f3aaaa4807c2a1afa8056b971f947b4a"
 dependencies = [
  "cc",
  "pkg-config",

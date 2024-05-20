@@ -1,5 +1,5 @@
-use fiveletters::core::entities;
-use fiveletters::core::value_objects as vo;
+use core::entities;
+use core::value_objects as vo;
 
 
 #[test]
