@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from 'classnames';
+import { invoke } from '@tauri-apps/api'
 
 import { sessionActive } from "./mock";
 
@@ -13,7 +14,11 @@ export default function Home() {
 
   const [newAttemption, setNewAttemption] = useState<string>('');
 
-  console.log(newAttemption);
+  useEffect(() => {
+    invoke<string>('hello', { name: 'Next.js' })
+      .then(result => console.log(result))
+      .catch(console.error)
+  }, [])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

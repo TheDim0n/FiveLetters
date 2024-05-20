@@ -1,5 +1,6 @@
 use fiveletters::adapters::sqlite::FiveLettersRepo;
 use fiveletters::core::interfaces::FiveLettersRepo as _;
+use fiveletters::core::services::GameSessionService;
 
 fn main() {
     let connection = sqlite::open("mock/database.db").unwrap();
@@ -7,7 +8,8 @@ fn main() {
     let repo = FiveLettersRepo::new(connection);
     repo.create_tables().unwrap();
     repo.fill_tables_with_init_data().unwrap_or(());
-    let session = repo.get_actual_session();
-    println!("{}", session.solution());
+    let service = GameSessionService::new(&repo);
+    let session = service.get_current_session();
+    println!("{:?}", session);
     repo.close();
 }

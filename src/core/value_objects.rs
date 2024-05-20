@@ -1,5 +1,8 @@
 use std;
 
+pub const ATTEMPT_COUNT: usize = 6;
+pub const WORD_SIZE: usize = 5;
+
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum LetterStatus{Undefined, InUncorrectPosition, InCorrectPosition, NotFound}
 
@@ -12,6 +15,16 @@ impl std::fmt::Display for WordStatuses {
     }
 }
 
-
-pub const ATTEMPT_COUNT: usize = 6;
-pub const WORD_SIZE: usize = 5;
+#[derive(Debug)]
+pub struct Attemption {
+    word: String,
+    statuses: [LetterStatus; WORD_SIZE]
+}
+impl Attemption {
+    pub fn empty() -> Attemption {
+        Attemption{
+            word: String::new(),
+            statuses: [LetterStatus::Undefined; WORD_SIZE]
+        }
+    }
+}
