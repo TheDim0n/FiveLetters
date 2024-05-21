@@ -89,8 +89,9 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
         let current_attempt = current_attempt_res.next();
         match current_attempt {
             Some(row) => {
+                let id = row.read::<i64, _>("id") as usize;
                 let word: &str = row.read::<&str, _>("value");
-                entities::GameSession::from(word)
+                entities::GameSession::from((id, word))
             }
             None => {
                 self.set_next_solution();
@@ -98,4 +99,21 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
             }
         }
     }
+
+    fn add_attemption(&self, word_id: usize, number: usize, value: String) -> Result<(), Box<dyn std::error::Error>> {
+        let query = "
+        insert INTO statuses
+        (word_id, number, value)
+        values
+        (:word_id, :number, :value)
+        ";
+        let stmt = self.connection.prepare(query).unwrap().into_iter();
+        stmt.bind::<&[(_, sqlite::Value)]>(&[
+            (":word_id", (word_id as i64).into()),
+            (":number", (number as i64).into()),
+            (":value", value.into())
+        ])?.next();
+        Ok(())
+    }
+
 }

@@ -6,18 +6,20 @@ type Attemptions = [vo::Attemption; vo::ATTEMPT_COUNT];
 
 #[derive(Debug)]
 pub struct GameSession {
+    id: usize,
     target: String,
     attemptions: Attemptions,
     current_attempt: usize,
     completed: bool
 }
 
-impl From<&str> for GameSession {
-    fn from(world: &str) -> GameSession {
+impl From<(usize, &str)> for GameSession {
+    fn from((id, world): (usize, &str)) -> GameSession {
         let attemptions: Attemptions = std::array::from_fn(|_| vo::Attemption::empty());
         GameSession{
+            id,
             target: String::from(world.to_lowercase()),
-            attemptions: attemptions,
+            attemptions,
             current_attempt: 0,
             completed: false
         }
