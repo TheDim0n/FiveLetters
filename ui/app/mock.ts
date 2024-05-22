@@ -63,3 +63,35 @@ export const sessionActive: GameSession = {
         },
     ]
 }
+
+
+export const sessionEmpty: GameSession = {
+    completed: false,
+    current_attempt: 1,
+    attemptions: [
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+        {
+            word: "",
+            statuses: [LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined, LetterStatus.Undefined],
+        },
+    ]
+}

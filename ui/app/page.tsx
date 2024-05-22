@@ -4,19 +4,20 @@ import { useState, useEffect } from "react";
 import classNames from 'classnames';
 import { invoke } from '@tauri-apps/api'
 
-import { sessionActive } from "./mock";
+import { sessionEmpty } from "./mock";
 
 import styles from "./page.module.css";
-import { Attemption, LetterStatus } from "./types.d";
+import { Attemption, LetterStatus, GameSession } from "./types.d";
 
 
 export default function Home() {
 
   const [newAttemption, setNewAttemption] = useState<string>('');
+  const [currentSession, setCurrentSession] = useState<GameSession>(sessionEmpty);
 
   useEffect(() => {
-    invoke<string>('hello', { name: 'Next.js' })
-      .then(result => console.log(result))
+    invoke<GameSession>('get_actual_session')
+      .then(result => setCurrentSession(result))
       .catch(console.error)
   }, [])
 
@@ -35,6 +36,7 @@ export default function Home() {
 
   const getAttemption = (attemption: Attemption, index: number, isActive: boolean) => {
     return <div key={index} className={styles.row}>{Array(5).fill(null).map((_, i) => {
+      console.log(index);
       const status = attemption.statuses.at(i) || LetterStatus.Undefined;
       let style = undefined;
       if (status == LetterStatus.Undefined) style = styles.undefined;
@@ -56,7 +58,7 @@ export default function Home() {
 
   return (<div className={classNames(styles.container)}>
       <div className={styles.grid}>
-        {sessionActive.attemptions.map((attemption, i) => getAttemption(attemption, i, i+1 == sessionActive.current_attempt))}
+        {currentSession?.attemptions.map((attemption, i) => getAttemption(attemption, i, i+1 == currentSession.current_attempt))}
       </div>
       <div
         className={classNames(styles.checkBtn, "noselect", newAttemption.length < 5 ? styles.checkBtnDisabled : styles.checkBtnAllowed)}

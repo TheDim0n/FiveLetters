@@ -1,6 +1,5 @@
 use crate::value_objects as vo;
 
-
 type Attemptions = [vo::Attemption; vo::ATTEMPT_COUNT];
 
 
@@ -20,7 +19,7 @@ impl From<(usize, &str)> for GameSession {
             id,
             target: String::from(world.to_lowercase()),
             attemptions,
-            current_attempt: 0,
+            current_attempt: 1,
             completed: false
         }
     }
@@ -32,9 +31,10 @@ impl GameSession {
             panic!("{}", format!("Input must have length = {len}", len=vo::WORD_SIZE));
         }
 
-        number = number - 1;
+        self.current_attempt = std::cmp::max(self.current_attempt, number + 1);
+        if self.current_attempt == vo::ATTEMPT_COUNT + 1 { self.completed = true };
 
-        self.current_attempt = std::cmp::max(self.current_attempt, number);
+        number = number - 1;
         self.attemptions[number].word = value.to_owned();
         
         let mut value_iterator = value.chars();

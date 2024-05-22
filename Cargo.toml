@@ -2,5 +2,6 @@
 members = [
     "adapters",
     "cli",
-    "core"
+    "core",
+    "desktop/src-tauri"
 ]
