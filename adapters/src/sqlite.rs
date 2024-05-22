@@ -91,7 +91,27 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
             Some(row) => {
                 let id = row.read::<i64, _>("id") as usize;
                 let word: &str = row.read::<&str, _>("value");
-                entities::GameSession::from((id, word))
+                let mut game_session = entities::GameSession::from((id, word));
+
+                let query = "
+                SELECT
+                    *
+                from statuses
+                WHERE word_id = :word_id
+                ";
+                for row in self.connection
+                    .prepare(query)
+                    .unwrap()
+                    .into_iter()
+                    .bind((1, game_session.id as i64))
+                    .unwrap()
+                    .map(|row| row.unwrap()) {
+                        game_session.add_attemption(
+                            &row.read::<&str, _>("value").to_owned(),
+                            row.read::<i64, _>("number") as usize
+                        )
+                    }
+                return game_session;
             }
             None => {
                 self.set_next_solution();
