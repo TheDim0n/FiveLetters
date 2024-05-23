@@ -2,6 +2,8 @@ import { GameSession, LetterStatus } from "./types.d";
 
 
 export const sessionCompleted: GameSession = {
+    id: -1,
+    target: "",
     completed: true,
     current_attempt: 5,
     attemptions: [
@@ -34,6 +36,8 @@ export const sessionCompleted: GameSession = {
 
 
 export const sessionActive: GameSession = {
+    id: -1,
+    target: "",
     completed: false,
     current_attempt: 3,
     attemptions: [
@@ -66,6 +70,8 @@ export const sessionActive: GameSession = {
 
 
 export const sessionEmpty: GameSession = {
+    id: -1,
+    target: "",
     completed: false,
     current_attempt: 1,
     attemptions: [

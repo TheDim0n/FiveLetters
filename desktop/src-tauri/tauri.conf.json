@@ -11,7 +11,9 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "fs": {
+        "scope": ["$RESOURCE/*"]
+      }
     },
     "bundle": {
       "active": true,
@@ -37,7 +39,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "../../mock/database.db"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {
@@ -55,10 +59,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 500,
         "resizable": true,
         "title": "5 букв",
-        "width": 800
+        "width": 450
       }
     ]
   }

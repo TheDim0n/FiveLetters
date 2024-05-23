@@ -13,6 +13,8 @@ export interface Attemption {
   
 export interface GameSession {
     attemptions: Attemption[],
+    id: number,
+    target: string,
     current_attempt: number,
     completed: boolean
 }

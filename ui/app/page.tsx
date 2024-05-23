@@ -12,6 +12,7 @@ import { Attemption, LetterStatus, GameSession } from "./types.d";
 
 export default function Home() {
 
+  const [needLoad, setNeedLoad] = useState<boolean>(true);
   const [newAttemption, setNewAttemption] = useState<string>('');
   const [currentSession, setCurrentSession] = useState<GameSession>(sessionEmpty);
 
@@ -19,7 +20,9 @@ export default function Home() {
     invoke<GameSession>('get_actual_session')
       .then(result => setCurrentSession(result))
       .catch(console.error)
-  }, [])
+  }, [needLoad])
+
+  console.log(currentSession)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -31,12 +34,24 @@ export default function Home() {
   }
 
   const onSubmit = () => {
-    console.log("submit")
+    invoke('save_attemption', {
+      value: newAttemption,
+      wordId: currentSession.id,
+      number: currentSession.current_attempt
+    }).then(() => {
+      setNeedLoad(!needLoad);
+      setNewAttemption('');
+    });
+  }
+
+  const setNext = () => {
+    invoke('set_next_session').then(() => {
+      setNeedLoad(!needLoad);
+    })
   }
 
   const getAttemption = (attemption: Attemption, index: number, isActive: boolean) => {
     return <div key={index} className={styles.row}>{Array(5).fill(null).map((_, i) => {
-      console.log(index);
       const status = attemption.statuses.at(i) || LetterStatus.Undefined;
       let style = undefined;
       if (status == LetterStatus.Undefined) style = styles.undefined;
@@ -60,9 +75,13 @@ export default function Home() {
       <div className={styles.grid}>
         {currentSession?.attemptions.map((attemption, i) => getAttemption(attemption, i, i+1 == currentSession.current_attempt))}
       </div>
-      <div
-        className={classNames(styles.checkBtn, "noselect", newAttemption.length < 5 ? styles.checkBtnDisabled : styles.checkBtnAllowed)}
+      {!currentSession.completed && currentSession.current_attempt <= 6 && <div
+        className={classNames(styles.Btn, "noselect", newAttemption.length < 5 ? styles.checkBtnDisabled : styles.checkBtnAllowed)}
         onClick={newAttemption.length === 5 ? onSubmit : undefined}
-      >Проверить</div>
+      >Проверить</div>}
+      {(currentSession.completed || currentSession.current_attempt > 6) && <div
+        className={classNames(styles.Btn, styles.nextBtnAllowed, "noselect")}
+        onClick={setNext}
+      >Продолжить</div>}
     </div>)
 }

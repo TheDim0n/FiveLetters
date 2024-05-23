@@ -51,5 +51,6 @@ impl GameSession {
                 }
             }
         }
+        self.completed = value == &self.target;
     }
 }

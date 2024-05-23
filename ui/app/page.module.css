@@ -61,7 +61,7 @@
   box-shadow: 0px 0px calc(var(--cell-size) * 0.1) yellow;
 }
 
-.checkBtn {
+.Btn {
   display: flex;
   min-width: calc(var(--cell-size) * 5 * 1.08);
   min-height: var(--cell-size);
@@ -91,4 +91,10 @@
 
 .checkBtnAllowed:hover {
   box-shadow: 0px 0px calc(var(--cell-size) * 0.1) yellow;
+}
+
+.nextBtnAllowed {
+  cursor: pointer;
+  background-color: rgb(72, 72, 72);
+  color: rgb(255, 255, 255);
 }

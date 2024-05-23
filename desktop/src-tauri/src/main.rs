@@ -9,8 +9,12 @@ mod dtos;
 use dtos::{GameSession, Attemption};
 
 #[tauri::command]
-fn get_actual_session() -> GameSession {
-  let connection = sqlite::open("../../mock/database.db").unwrap();
+fn get_actual_session(handle: tauri::AppHandle) -> GameSession {
+  let db_path = handle.path_resolver()
+      .resolve_resource("../../mock/database.db")
+      .expect("failed to resolve resource");
+  
+  let connection = sqlite::open(db_path).unwrap();
 
   let repo = FiveLettersRepo::new(connection);
   // repo.create_tables().unwrap();
@@ -29,9 +33,45 @@ fn get_actual_session() -> GameSession {
   }
 }
 
+
+#[tauri::command]
+fn save_attemption(
+  word_id: usize,
+  number: usize,
+  value: String,
+  handle: tauri::AppHandle
+) {
+  let db_path = handle.path_resolver()
+    .resolve_resource("../../mock/database.db")
+    .expect("failed to resolve resource");
+  
+  let connection = sqlite::open(db_path).unwrap();
+
+  let repo = FiveLettersRepo::new(connection);
+  repo.add_attemption(word_id, number, value).unwrap();
+  repo.close();
+}
+
+#[tauri::command]
+fn set_next_session(handle: tauri::AppHandle) {
+  let db_path = handle.path_resolver()
+    .resolve_resource("../../mock/database.db")
+    .expect("failed to resolve resource");
+
+  let connection = sqlite::open(db_path).unwrap();
+  let repo = FiveLettersRepo::new(connection);
+  repo.set_next_solution();
+  repo.close();
+}
+
+
 fn main() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![get_actual_session])
+    .invoke_handler(tauri::generate_handler![
+      get_actual_session,
+      save_attemption,
+      set_next_session
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
