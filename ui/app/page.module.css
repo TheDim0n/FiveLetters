@@ -9,9 +9,6 @@
   grid-auto-rows: calc(var(--cell-size) * 1.04);
   grid-auto-columns: calc(var(--cell-size) * 1.04);
   gap: calc(var(--cell-size) * 1.04 / 10);
-  /* justify-content: center; */
-  /* justify-items: center; */
-  /* align-items: center; */
 }
 
 .row {
@@ -95,6 +92,13 @@
 
 .nextBtnAllowed {
   cursor: pointer;
-  background-color: rgb(72, 72, 72);
-  color: rgb(255, 255, 255);
+  background-color: whitesmoke;
+  color: rgb(25, 25, 25);
+}
+
+.answer {
+  display: flex;
+  color: gray;
+  justify-content: center;
+  margin-top: 5px;
 }

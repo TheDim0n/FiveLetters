@@ -12,8 +12,9 @@ import { Attemption, LetterStatus, GameSession } from "./types.d";
 
 export default function Home() {
 
+  const [wordNotFound, setWordNotFound] = useState<boolean>(false);
   const [needLoad, setNeedLoad] = useState<boolean>(true);
-  const [newAttemption, setNewAttemption] = useState<string>('');
+  const [newAttemption, setNewAttemption] = useState<string>(' '.repeat(5));
   const [currentSession, setCurrentSession] = useState<GameSession>(sessionEmpty);
 
   useEffect(() => {
@@ -22,15 +23,17 @@ export default function Home() {
       .catch(console.error)
   }, [needLoad])
 
-  console.log(currentSession)
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length === 1) setNewAttemption(newAttemption + value);
-    else if (value.length === 0 && newAttemption.length > 0) {
-      setNewAttemption(newAttemption.substring(0, newAttemption.length - 1))
+  const onChange = (value: string, index: number) => {
+    setWordNotFound(false);
+    let word = newAttemption;
+    if (value.length === 1) {
+      word = newAttemption.substring(0, index) + value + newAttemption.substring(index + 1);
+    }
+    else if (value.length === 0) {
+      word = newAttemption.substring(0, index) + ' ' + newAttemption.substring(index + 1);
+      
     };
-    
+    setNewAttemption(word);
   }
 
   const onSubmit = () => {
@@ -39,9 +42,10 @@ export default function Home() {
       wordId: currentSession.id,
       number: currentSession.current_attempt
     }).then(() => {
+      setWordNotFound(false);
       setNeedLoad(!needLoad);
       setNewAttemption('');
-    });
+    }).catch(() => setWordNotFound(true));
   }
 
   const setNext = () => {
@@ -62,9 +66,10 @@ export default function Home() {
         return <input
           key={i}
           type="text"
+          autoComplete="off"
           maxLength={1}
           className={classNames(styles.undefined, styles.cell, styles.input)}
-          onChange={onChange}
+          onChange={e => onChange(e.target.value, i)}
         />
       }
       return <div key={i} className={classNames(style, styles.cell)}>{attemption.word.at(i)}</div>
@@ -76,12 +81,17 @@ export default function Home() {
         {currentSession?.attemptions.map((attemption, i) => getAttemption(attemption, i, i+1 == currentSession.current_attempt))}
       </div>
       {!currentSession.completed && currentSession.current_attempt <= 6 && <div
-        className={classNames(styles.Btn, "noselect", newAttemption.length < 5 ? styles.checkBtnDisabled : styles.checkBtnAllowed)}
+        className={classNames(styles.Btn, "noselect", newAttemption.replaceAll(' ', '').length < 5 ? styles.checkBtnDisabled : styles.checkBtnAllowed)}
         onClick={newAttemption.length === 5 ? onSubmit : undefined}
       >Проверить</div>}
-      {(currentSession.completed || currentSession.current_attempt > 6) && <div
-        className={classNames(styles.Btn, styles.nextBtnAllowed, "noselect")}
-        onClick={setNext}
-      >Продолжить</div>}
+      {(currentSession.completed || currentSession.current_attempt > 6) && <div>
+        <div
+          className={classNames(styles.Btn, styles.nextBtnAllowed, "noselect")}
+          onClick={setNext}
+        >Продолжить
+        </div>
+        {!currentSession.completed && <div className={classNames(styles.answer)}>Ответ: {currentSession.target}</div>}
+      </div>}
+      {wordNotFound && <div className={classNames(styles.answer)}>Слово не найдено</div>}
     </div>)
 }

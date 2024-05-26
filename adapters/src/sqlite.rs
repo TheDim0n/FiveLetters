@@ -17,7 +17,8 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
             id     INTEGER PRIMARY KEY AUTOINCREMENT,
             value  TEXT    NOT NULL,
             status INTEGER NOT NULL
-                           DEFAULT ( {default_status})
+                           DEFAULT ( {default_status}),
+            number INTEGER
         );
         CREATE TABLE IF NOT EXISTS statuses (
             id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +61,9 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
         self.connection.execute(query).unwrap();
 
         query = format!("
-        update words set status = {new_status} where id = (
+        update words
+        set status = {new_status}, number = (select max(COALESCE(number, 0)) + 1 from words)
+        where id = (
             select
                 id
             from words
@@ -134,6 +137,19 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
             (":value", value.into())
         ])?.next();
         Ok(())
+    }
+
+    fn is_word_exists(&self, word: &String) -> bool {
+        let query = "select * from words where value = :word";
+        match self.connection.prepare(query).unwrap()
+            .into_iter()
+            .bind((1, &word.to_lowercase() as &str))
+            .unwrap()
+            .map(|row| row.unwrap()).next()
+        {
+            Some(_) => return true,
+            None => return false
+        }
     }
 
 }

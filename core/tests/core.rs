@@ -89,13 +89,3 @@ fn test_add_attentions_more() {
         vo::LetterStatus::NotFound,
     ], "{:#?}", statuses);
 }
-
-// факел
-// перец
-
-// факел
-// фазан
-
-// факел
-// абзац
-// слава

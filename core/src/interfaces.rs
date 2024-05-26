@@ -8,4 +8,5 @@ pub trait FiveLettersRepo {
     fn get_actual_session(&self) -> entities::GameSession;
     fn set_next_solution(&self);
     fn add_attemption(&self, word_id: usize, number: usize, value: String) -> Result<(), Box<dyn std::error::Error>>;
+    fn is_word_exists(&self, word: &String) -> bool;
 }
