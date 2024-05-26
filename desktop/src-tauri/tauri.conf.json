@@ -1,9 +1,9 @@
 {
   "build": {
     "beforeBuildCommand": "cd ../ui && npm run build",
-    "beforeDevCommand": "cd ../ui && npm run dev",
+    "beforeDevCommand": "cd ../ui && npm start",
     "devPath": "http://localhost:3000",
-    "distDir": "../../ui"
+    "distDir": "../../ui/build"
   },
   "package": {
     "productName": "FiveLetters",
@@ -12,7 +12,7 @@
   "tauri": {
     "allowlist": {
       "fs": {
-        "scope": ["$RESOURCE*"]
+        "scope": ["../../$RESOURCE*"]
       }
     },
     "bundle": {
@@ -30,7 +30,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "FiveLetters",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

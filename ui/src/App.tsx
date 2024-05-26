@@ -1,12 +1,10 @@
-'use client'
-
 import { useState, useEffect } from "react";
 import classNames from 'classnames';
 import { invoke } from '@tauri-apps/api'
 
 import { sessionEmpty } from "./mock";
 
-import styles from "./page.module.css";
+import styles from "./App.module.css";
 import { Attemption, LetterStatus, GameSession } from "./types.d";
 
 
