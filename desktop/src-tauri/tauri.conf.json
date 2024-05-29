@@ -12,12 +12,12 @@
   "tauri": {
     "allowlist": {
       "fs": {
-        "scope": ["../../$RESOURCE*"]
+        "scope": ["$RESOURCE*"]
       }
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Game",
       "copyright": "",
       "deb": {
         "depends": []
@@ -39,9 +39,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [
-        "../../mock/database.db"
-      ],
+      "resources": {
+        "../../mock/database.db": "./mock"
+      },
       "shortDescription": "",
       "targets": "all",
       "windows": {

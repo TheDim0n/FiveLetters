@@ -69,7 +69,7 @@ fn main() {
     .setup(|app| {
       let handle = app.handle();
       let db_path = handle.path_resolver()
-        .resolve_resource("../../mock/database.db")
+        .resolve_resource("./mock/database.db")
         .expect("failed to resolve resource");
       app.manage(DBFilePath(db_path));
       Ok(())
