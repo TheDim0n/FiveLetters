@@ -44,6 +44,7 @@ impl GameSession {
         if self.current_attempt == vo::ATTEMPT_COUNT + 1 { self.completed = true };
 
         number = number - 1;
+        let value = &value.to_lowercase();
         self.attemptions[number].word = value.to_owned();
 
         let target_char_count = self.get_char_count(&self.target);

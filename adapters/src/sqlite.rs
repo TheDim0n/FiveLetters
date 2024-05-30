@@ -152,4 +152,23 @@ impl interfaces::FiveLettersRepo for FiveLettersRepo {
         }
     }
 
+    fn is_word_in_attemptions(&self, word_id: usize, word: &String) -> bool {
+        let query = "SELECT
+            value
+        FROM statuses
+        where word_id = :word_id
+        ";
+        for row in self.connection
+            .prepare(query)
+            .unwrap()
+            .into_iter()
+            .bind((1, word_id as i64))
+            .unwrap()
+            .map(|row| row.unwrap())
+        {
+            let value = row.read::<&str, _>("value");
+            if value.to_lowercase() == word.to_lowercase() { return true }
+        }
+        false
+    }
 }

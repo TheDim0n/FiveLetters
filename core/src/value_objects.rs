@@ -8,7 +8,7 @@ pub enum LetterStatus{Undefined, InUncorrectPosition, InCorrectPosition, NotFoun
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 #[repr(i8)]
-pub enum WordStatuses{Inactive = -1, Active = 0, Solved = 1}
+pub enum WordStatuses{Inactive = -1, Active = 0, Solved = 1} // TODO: add Unsolved
 impl std::fmt::Display for WordStatuses {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", *self as i8)

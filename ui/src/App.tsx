@@ -10,7 +10,7 @@ import { Attemption, LetterStatus, GameSession } from "./types.d";
 
 export default function Home() {
 
-  const [wordNotFound, setWordNotFound] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [needLoad, setNeedLoad] = useState<boolean>(true);
   const [newAttemption, setNewAttemption] = useState<string>(' '.repeat(5));
   const [currentSession, setCurrentSession] = useState<GameSession>(sessionEmpty);
@@ -22,7 +22,7 @@ export default function Home() {
   }, [needLoad])
 
   const onChange = (value: string, index: number) => {
-    setWordNotFound(false);
+    setError(undefined);
     let word = newAttemption;
     if (value.length === 1) {
       word = newAttemption.substring(0, index) + value + newAttemption.substring(index + 1);
@@ -40,16 +40,21 @@ export default function Home() {
       wordId: currentSession.id,
       number: currentSession.current_attempt
     }).then(() => {
-      setWordNotFound(false);
+      setError(undefined);
       setNeedLoad(!needLoad);
       setNewAttemption('');
-    }).catch(() => setWordNotFound(true));
+    }).catch((e) => setError(e));
   }
 
   const setNext = () => {
     invoke('set_next_session').then(() => {
       setNeedLoad(!needLoad);
     })
+  }
+
+  const getLetter = (index: number): string => {
+    const char = newAttemption.at(index);
+    return char === undefined ? '' : char.trim()
   }
 
   const getAttemption = (attemption: Attemption, index: number, isActive: boolean) => {
@@ -63,6 +68,7 @@ export default function Home() {
       if (isActive) {
         return <input
           key={i}
+          value={getLetter(i)}
           type="text"
           autoComplete="off"
           maxLength={1}
@@ -90,6 +96,6 @@ export default function Home() {
         </div>
         {!currentSession.completed && <div className={classNames(styles.answer)}>Ответ: {currentSession.target}</div>}
       </div>}
-      {wordNotFound && <div className={classNames(styles.answer)}>Слово не найдено</div>}
+      {error !== undefined && <div className={classNames(styles.error)}>{error}</div>}
     </div>)
 }

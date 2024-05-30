@@ -9,4 +9,5 @@ pub trait FiveLettersRepo {
     fn set_next_solution(&self);
     fn add_attemption(&self, word_id: usize, number: usize, value: String) -> Result<(), Box<dyn std::error::Error>>;
     fn is_word_exists(&self, word: &String) -> bool;
+    fn is_word_in_attemptions(&self, word_id: usize, word: &String) -> bool;
 }

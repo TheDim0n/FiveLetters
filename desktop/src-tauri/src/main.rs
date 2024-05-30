@@ -38,19 +38,26 @@ fn save_attemption(
   number: usize,
   value: String,
   db_path: tauri::State<DBFilePath>
-) -> Result<(), ()> {
+) -> Result<(), &str> {
   
   let connection = sqlite::open(&db_path.0).unwrap(); 
 
   let repo = FiveLettersRepo::new(connection);
   match repo.is_word_exists(&value) {
-      true => repo.add_attemption(word_id, number, value).unwrap(),
+      true => (),
       false => {
         repo.close();
-        return Err(())
+        return Err("Слово не найдено")
       }
   }
-  
+  match repo.is_word_in_attemptions(word_id, &value) {
+      false => (),
+      true => {
+        repo.close();
+        return Err("Слово уже было")
+      }
+  }
+  repo.add_attemption(word_id, number, value).unwrap();
   repo.close();
   Ok(())
 }

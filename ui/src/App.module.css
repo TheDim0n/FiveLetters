@@ -96,9 +96,10 @@
   color: rgb(25, 25, 25);
 }
 
-.answer {
+.error {
   display: flex;
-  color: gray;
+  /* color: gray; */
   justify-content: center;
   margin-top: 5px;
+  color: rgb(169, 24, 24);
 }
