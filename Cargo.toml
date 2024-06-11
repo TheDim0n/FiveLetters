@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "adapters",
+    "cli",
+    "core",
+    "desktop/src-tauri"
+]

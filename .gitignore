@@ -5,3 +5,8 @@
 dist/
 build/
 out/
+
+# Added by cargo
+
+/target
+*.db
