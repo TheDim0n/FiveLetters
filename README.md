@@ -1,8 +1,23 @@
-Состояние буквы (на позиции):
-0. Неопределено - состояни букв в начале игры. После первой попытки состояние не будет использоваться.
-1. Есть в слове и стоит на своей позиции
-2. Есть в слове, но стоит на другой позиции
-3. Нет в слове
+# FiveLetters
+Игра "5 букв"
 
-Словарь:
-https://github.com/Harrix/Russian-Nouns/blob/main/dist/russian_nouns.txt
+## Platforms
+Поддерживаемые платформы:
+- Windows (already in releases)
+- Linux (manual build)
+- MacOS (manual build)
+
+## Stack
+- `Rust` programming language
+- `Tauri`
+- `React` (with `Typescript`)
+
+## Run development
+```
+cargo tauri dev
+```
+
+## Run build
+```
+cargo tauri build
+```
